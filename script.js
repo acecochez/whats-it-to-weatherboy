@@ -266,11 +266,14 @@ searchInput.addEventListener ('input', () => {
 
 	debounceTimer = setTimeout (async () => {
 		try {
+			searchInput.parentElement.classList.add ('is-loading');
 			const response = await fetch (`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent (query)}&count=5&language=en&format=json`);
 			const data = await response.json ();
+			searchInput.parentElement.classList.remove ('is-loading');
 
 			if (data.results && data.results.length > 0) {
 				suggestionsContainer.innerHTML = '';
+				suggestionsContainer.scrollTop = 0;
 				data.results.forEach (result => {
 					const div = document.createElement ('div');
 					div.className = 'suggestion-item';
@@ -287,7 +290,7 @@ searchInput.addEventListener ('input', () => {
 					`;
 					
 					div.addEventListener ('click', () => {
-						searchInput.value = result.name;
+						searchInput.value = `${result.name}, ${result.country}`;
 						suggestionsContainer.classList.add ('is-hidden');
 						currentCoords = {
 							latitude: result.latitude,
@@ -307,6 +310,7 @@ searchInput.addEventListener ('input', () => {
 				suggestionsContainer.classList.add ('is-hidden');
 			}
 		} catch (error) {
+			searchInput.parentElement.classList.remove ('is-loading');
 			console.error ('Error fetching suggestions:', error);
 		}
 	}, 300);

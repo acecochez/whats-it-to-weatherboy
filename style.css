@@ -292,6 +292,10 @@ input:checked + .slider:before {
     box-shadow: 0 0 10px var(--gold);
 }
 
+.control.is-loading::after {
+    border-color: transparent transparent var(--school-bus-yellow) var(--school-bus-yellow) !important;
+}
+
 .search-suggestions {
     position: absolute;
     top: 100%;
