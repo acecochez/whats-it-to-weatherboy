@@ -225,12 +225,12 @@ input:checked + .slider:before {
 .detail-card {
     background-color: var(--oxford-navy) !important;
     border: 1px solid var(--school-bus-yellow) !important;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 2 / 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    width: 47%;
+    width: 70%;
 }
 
 .detail-card .heading {
@@ -256,6 +256,11 @@ input:checked + .slider:before {
     height: 48px;
 }
 
+.weather-icon-large {
+    width: 96px;
+    height: 96px;
+}
+
 .search-feedback-icon {
     width: 20px;
     height: 20px;
@@ -267,6 +272,7 @@ input:checked + .slider:before {
     background-color: var(--prussian-blue);
     color: var(--almost-pure-white);
     border: 1px solid var(--oxford-navy);
+    width: 90%;
 }
 
 #search-input::placeholder {

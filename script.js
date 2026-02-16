@@ -10,7 +10,6 @@ const windLabel = document.getElementById ('wind-label');
 const precipitationLabel = document.getElementById ('precipitation-label');
 
 const searchInput = document.getElementById ('search-input');
-const searchButton = document.getElementById ('search-button');
 const suggestionsContainer = document.getElementById ('suggestions');
 
 const currentFeelsLike = document.getElementById ('current-feels-like');
@@ -76,6 +75,10 @@ function showEmptyState () {
 	currentHumidity.textContent = 'Dry!';
 	currentWind.textContent = 'Icy cold!';
 	currentPrecipitation.textContent = 'Don\'t care!';
+	todayTemp.textContent = '--°';
+	todayDescription.textContent = '--';
+	todayRange.textContent = '-- / --';
+	todayIcon.classList.add ('is-hidden');
 	scrollLeftBtn.classList.add ('is-hidden');
 	scrollRightBtn.classList.add ('is-hidden');
 }
@@ -174,7 +177,9 @@ function displayWeather (data) {
 
 	todayTemp.textContent = `${temp}${unit}`;
 	todayIcon.src = getWeatherIcon (weatherCode);
+	todayIcon.classList.remove ('is-hidden');
 	todayDescription.textContent = weatherIcons[weatherCode] || weatherIcons.default;
+	todayDescription.classList.add ('is-capitalized');
 
 	// Display today's high/low
 	const maxTemp = data.daily.temperature_2m_max[0];
@@ -233,14 +238,6 @@ scrollLeftBtn.addEventListener ('click', () => {
 
 scrollRightBtn.addEventListener ('click', () => {
 	hourlyForecastContainer.scrollBy ({left: 200, behavior: 'smooth'});
-});
-
-searchButton.addEventListener ('click', () => {
-	const city = searchInput.value.trim ();
-	if (city) {
-		searchCity (city).then (_r => {
-		});
-	}
 });
 
 searchInput.addEventListener ('keypress', (e) => {

@@ -72,18 +72,21 @@
           </span>
 				<div id="suggestions" class="search-suggestions is-hidden"></div>
 			</div>
-			<button id="search-button" class="button is-link mt-2">Search</button>
 		</div>
 		<div class="mt-6">
 			<div class="columns">
-				<div class="column is-three-quarters">
+				<div class="column is-two-thirds">
 					<div class="card bg-today p-4 main-forecast-card mb-5">
 						<div class="has-text-centered-mobile">
 							<h2 class="title is-4 mb-2">Today's forecast</h2>
 							<div id="today-forecast-content"
 							     class="is-flex is-flex-direction-column is-align-items-center-mobile">
 								<!-- Insert today's big forecast here -->
+								<img id="today-icon" src="assets/images/weather/icon-sunny.webp" alt="weather icon"
+								     class="weather-icon-large mb-2 is-hidden">
 								<p class="subtitle is-2 mb-0" id="today-temp">--°</p>
+								<p id="today-description"
+								   class="is-size-5 has-text-weight-semibold is-capitalized mb-1">--</p>
 								<div class="is-flex is-align-items-center">
 									<p class="is-size-6" id="today-range">-- / --</p>
 								</div>
@@ -106,7 +109,7 @@
 					</div>
 				</div>
 
-				<div class="column is-one-quarter">
+				<div class="column is-one-third">
 					<div class="columns is-multiline is-variable is-1">
 						<div class="column is-full">
 							<div class="card detail-card">
