@@ -109,6 +109,22 @@ input:checked + .slider {
     border-color: var(--gold);
 }
 
+.dropdown-divider {
+    border-bottom: 1px solid var(--school-bus-yellow);
+}
+
+.error-icon {
+    width: 64px;
+}
+
+.weatherboy-image {
+    max-width: 100%;
+}
+
+.forecast-temp {
+    color: var(--almost-pure-white) !important;
+}
+
 input:focus + .slider {
     box-shadow: 0 0 1px var(--gold);
 }
@@ -327,22 +343,6 @@ input:checked + .slider:before {
     border-color: var(--gold);
     box-shadow: 0 0 8px var(--gold);
     color: var(--almost-pure-white);
-}
-
-#search-button {
-    background-color: var(--oxford-navy) !important;
-    color: var(--almost-pure-white) !important;
-    border: 1px solid var(--school-bus-yellow);
-    font-weight: bold;
-}
-
-#search-button:hover {
-    background-color: var(--prussian-blue) !important;
-    box-shadow: 0 0 10px var(--gold);
-}
-
-.control.is-loading::after {
-    border-color: transparent transparent var(--school-bus-yellow) var(--school-bus-yellow) !important;
 }
 
 .search-suggestions {

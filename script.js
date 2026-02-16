@@ -1,36 +1,34 @@
-const unitsMenu = document.querySelector ('.units-toggle');
-const unitsDropdown = document.querySelector ('.dropdown');
+// noinspection JSUnresolvedReference
 
-const tempToggle = document.getElementById ('temp-toggle');
-const windToggle = document.getElementById ('wind-toggle');
-const precipitationToggle = document.getElementById ('precipitation-toggle');
-
-const tempLabel = document.getElementById ('temp-label');
-const windLabel = document.getElementById ('wind-label');
-const precipitationLabel = document.getElementById ('precipitation-label');
-
-const searchInput = document.getElementById ('search-input');
-const suggestionsContainer = document.getElementById ('suggestions');
-
-const currentFeelsLike = document.getElementById ('current-feels-like');
-const currentHumidity = document.getElementById ('current-humidity');
-const currentWind = document.getElementById ('current-wind');
-const currentPrecipitation = document.getElementById ('current-precipitation');
-const todayTemp = document.getElementById ('today-temp');
-const todayIcon = document.getElementById ('today-icon');
-const todayDescription = document.getElementById ('today-description');
-const todayRange = document.getElementById ('today-range');
-document.getElementById ('today-forecast-content');
-const searchCheckIcon = document.getElementById ('search-check-icon');
-const errorModal = document.getElementById ('error-modal');
-const weatherboyModal = document.getElementById ('weatherboy-modal');
-const logoContent = document.querySelector ('.logo-content');
-const retryButton = document.getElementById ('retry-button');
-const exampleLocationButtons = document.querySelectorAll ('.example-location');
-
-const hourlyForecastContainer = document.getElementById ('hourly-forecast');
-const scrollLeftBtn = document.getElementById ('hourly-scroll-left');
-const scrollRightBtn = document.getElementById ('hourly-scroll-right');
+const elements = {
+	exampleLocationButtons: document.querySelectorAll ('.example-location'),
+	unitsMenu: document.querySelector ('.units-toggle'),
+	unitsDropdown: document.querySelector ('.dropdown'),
+	tempToggle: document.getElementById ('temp-toggle'),
+	windToggle: document.getElementById ('wind-toggle'),
+	precipitationToggle: document.getElementById ('precipitation-toggle'),
+	tempLabel: document.getElementById ('temp-label'),
+	windLabel: document.getElementById ('wind-label'),
+	precipitationLabel: document.getElementById ('precipitation-label'),
+	searchInput: document.getElementById ('search-input'),
+	suggestionsContainer: document.getElementById ('suggestions'),
+	currentFeelsLike: document.getElementById ('current-feels-like'),
+	currentHumidity: document.getElementById ('current-humidity'),
+	currentWind: document.getElementById ('current-wind'),
+	currentPrecipitation: document.getElementById ('current-precipitation'),
+	todayTemp: document.getElementById ('today-temp'),
+	todayIcon: document.getElementById ('today-icon'),
+	todayDescription: document.getElementById ('today-description'),
+	todayRange: document.getElementById ('today-range'),
+	searchCheckIcon: document.getElementById ('search-check-icon'),
+	errorModal: document.getElementById ('error-modal'),
+	weatherboyModal: document.getElementById ('weatherboy-modal'),
+	logoContent: document.querySelector ('.logo-content'),
+	retryButton: document.getElementById ('retry-button'),
+	hourlyForecastContainer: document.getElementById ('hourly-forecast'),
+	scrollLeftBtn: document.getElementById ('hourly-scroll-left'),
+	scrollRightBtn: document.getElementById ('hourly-scroll-right'),
+};
 
 const weatherIcons = {
 	0: 'sunny',
@@ -63,38 +61,46 @@ function getWeatherIcon (code) {
 let currentCoords = null;
 
 function showEmptyState () {
-	hourlyForecastContainer.innerHTML = `
+	elements.hourlyForecastContainer.innerHTML = `
 		<div class="column is-full has-text-centered">
 			<p class="subtitle is-5 has-text-white has-text-weight-normal">Nothing yet!</p>
 		</div>
 	`;
-	hourlyForecastContainer.classList.add ('m-0');
-	hourlyForecastContainer.classList.remove ('is-variable', 'is-1');
-	hourlyForecastContainer.style.paddingBottom = '';
-	currentFeelsLike.textContent = 'Nothing yet!';
-	currentHumidity.textContent = 'Dry!';
-	currentWind.textContent = 'Icy cold!';
-	currentPrecipitation.textContent = 'Don\'t care!';
-	todayTemp.textContent = '--°';
-	todayDescription.textContent = '--';
-	todayRange.textContent = '-- / --';
-	todayIcon.classList.add ('is-hidden');
-	scrollLeftBtn.classList.add ('is-hidden');
-	scrollRightBtn.classList.add ('is-hidden');
+	elements.hourlyForecastContainer.classList.add ('m-0');
+	elements.hourlyForecastContainer.classList.remove ('is-variable', 'is-1', 'pb-4');
+	elements.currentFeelsLike.textContent = 'Nothing yet!';
+	elements.currentHumidity.textContent = 'Dry!';
+	elements.currentWind.textContent = 'Icy cold!';
+	elements.currentPrecipitation.textContent = 'Don\'t care!';
+	elements.todayTemp.textContent = '--°';
+	elements.todayDescription.textContent = '--';
+	elements.todayRange.textContent = '-- / --';
+	elements.todayIcon.classList.add ('is-hidden');
+	elements.scrollLeftBtn.classList.add ('is-hidden');
+	elements.scrollRightBtn.classList.add ('is-hidden');
 }
 
-// Initialise empty state
 showEmptyState ();
 
+// Weather functionalities using meteo api
 async function searchCity (city) {
 	try {
 		const response = await fetch (`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent (city)}&count=1&language=en&format=json`);
 		const data = await response.json ();
 		if (data.results && data.results.length > 0) {
-			const {latitude, longitude, name, country} = data.results[0];
-			currentCoords = {latitude, longitude, name, country};
-			console.log (`Found: ${name}, ${country} (${latitude}, ${longitude})`);
-			searchCheckIcon.classList.add ('is-active');
+			const {
+				latitude,
+				longitude,
+				name,
+				country
+			} = data.results[0];
+			currentCoords = {
+				latitude,
+				longitude,
+				name,
+				country
+			};
+			elements.searchCheckIcon.classList.add ('is-active');
 			await fetchWeather ();
 		} else {
 			showError ();
@@ -105,172 +111,31 @@ async function searchCity (city) {
 	}
 }
 
-function showError () {
-	searchCheckIcon.classList.remove ('is-active');
-	errorModal.classList.add ('is-active');
-}
-
-function hideError () {
-	errorModal.classList.remove ('is-active');
-}
-
-retryButton.addEventListener ('click', () => {
-	hideError ();
-	searchInput.value = '';
-	searchInput.focus ();
-});
-
-exampleLocationButtons.forEach (btn => {
-	btn.addEventListener ('click', () => {
-		hideError ();
-		searchInput.value = btn.textContent;
-		searchCity (btn.textContent).then (_r => {
-		});
-	});
-});
-
-// Logo click to open weatherboy modal
-logoContent.addEventListener ('click', () => {
-	weatherboyModal.classList.add ('is-active');
-});
-
-// Close weatherboy modal
-weatherboyModal.querySelector ('.modal-background').addEventListener ('click', () => {
-	weatherboyModal.classList.remove ('is-active');
-});
-weatherboyModal.querySelector ('.modal-close').addEventListener ('click', () => {
-	weatherboyModal.classList.remove ('is-active');
-});
-
-async function fetchWeather () {
-	if (!currentCoords) return;
-
-	const {latitude, longitude} = currentCoords;
-	const tempUnit = tempToggle.checked ? 'fahrenheit' : 'celsius';
-	const windUnit = windToggle.checked ? 'mph' : 'kmh';
-	const precipitationUnit = precipitationToggle.checked ? 'inch' : 'mm';
-
-	const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,precipitation,weather_code&hourly=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&temperature_unit=${tempUnit}&wind_speed_unit=${windUnit}&precipitation_unit=${precipitationUnit}`;
-
-	try {
-		const response = await fetch (url);
-		const data = await response.json ();
-		displayWeather (data);
-	} catch (error) {
-		console.error ('Error fetching weather:', error);
-	}
-}
-
-function displayWeather (data) {
-	const current = data.current;
-	const currentUnits = data.current_units;
-
-	currentFeelsLike.textContent = `${current.apparent_temperature}${currentUnits.apparent_temperature}`;
-	currentHumidity.textContent = `${current.relative_humidity_2m}${currentUnits.relative_humidity_2m}`;
-	currentWind.textContent = `${current.wind_speed_10m} ${currentUnits.wind_speed_10m}`;
-	currentPrecipitation.textContent = `${current.precipitation} ${currentUnits.precipitation}`;
-
-	// Today's forecast (big)
-	const weatherCode = current.weather_code;
-	const temp = current.temperature_2m;
-	const unit = currentUnits.temperature_2m;
-
-	todayTemp.textContent = `${temp}${unit}`;
-	todayIcon.src = getWeatherIcon (weatherCode);
-	todayIcon.classList.remove ('is-hidden');
-	todayDescription.textContent = weatherIcons[weatherCode] || weatherIcons.default;
-	todayDescription.classList.add ('is-capitalized');
-
-	// Display today's high/low
-	const maxTemp = data.daily.temperature_2m_max[0];
-	const minTemp = data.daily.temperature_2m_min[0];
-	todayRange.textContent = `${maxTemp}${unit} / ${minTemp}${unit}`;
-
-	// Hourly forecast (next 24 hours)
-	scrollLeftBtn.classList.remove ('is-hidden');
-	scrollRightBtn.classList.remove ('is-hidden');
-	hourlyForecastContainer.innerHTML = '';
-	hourlyForecastContainer.classList.remove ('m-0');
-	hourlyForecastContainer.classList.add ('is-variable', 'is-1', 'px-2');
-	hourlyForecastContainer.style.paddingBottom = '1rem';
-	const now = new Date ();
-	const startIndex = data.hourly.time.findIndex (t => new Date (t) >= now);
-	const displayIndex = startIndex !== -1 ? startIndex : 0;
-	const next24Hours = data.hourly.time.slice (displayIndex, displayIndex + 24);
-
-	next24Hours.forEach ((time, i) => {
-		const dateObj = new Date (time);
-		const date = dateObj.toLocaleDateString ('en-US', {month: 'short', day: 'numeric'});
-		const hour = dateObj.toLocaleTimeString ('en-US', {hour: 'numeric'});
-		const temp = data.hourly.temperature_2m[displayIndex + i];
-		const unit = data.hourly_units.temperature_2m;
-		const weatherCode = data.hourly.weather_code[displayIndex + i];
-
-		const col = document.createElement ('div');
-		col.className = 'column is-narrow p-1';
-		col.innerHTML = `
-			<div class="card forecast-item-card p-2 has-text-centered">
-				<p class="is-size-7">${date}</p>
-				<p class="is-size-7">${hour}</p>
-				<img src="${getWeatherIcon (weatherCode)}" class="weather-icon mb-1" alt="weather">
-				<p style="color: var(--almost-pure-white) !important;">${temp}${unit}</p>
-			</div>
-		`;
-		hourlyForecastContainer.appendChild (col);
-	});
-
-	// Scroll to start of hourly forecast (current time)
-	hourlyForecastContainer.scrollLeft = 0;
-	setTimeout (updateScrollButtons, 100);
-}
-
-function updateScrollButtons () {
-	const maxScroll = hourlyForecastContainer.scrollWidth - hourlyForecastContainer.clientWidth;
-	scrollLeftBtn.disabled = hourlyForecastContainer.scrollLeft <= 0;
-	scrollRightBtn.disabled = hourlyForecastContainer.scrollLeft >= maxScroll;
-}
-
-hourlyForecastContainer.addEventListener ('scroll', updateScrollButtons);
-
-scrollLeftBtn.addEventListener ('click', () => {
-	hourlyForecastContainer.scrollBy ({left: -200, behavior: 'smooth'});
-});
-
-scrollRightBtn.addEventListener ('click', () => {
-	hourlyForecastContainer.scrollBy ({left: 200, behavior: 'smooth'});
-});
-
-searchInput.addEventListener ('keypress', (e) => {
-	if (e.key === 'Enter') {
-		const city = searchInput.value.trim ();
-		if (city) {
-			searchCity (city).then (_r => {
-			});
-			suggestionsContainer.classList.add ('is-hidden');
-		}
-	}
-});
-
 let debounceTimer;
-searchInput.addEventListener ('input', () => {
+elements.searchInput.addEventListener ('input', () => {
 	clearTimeout (debounceTimer);
-	const query = searchInput.value.trim ();
+	const query = elements.searchInput.value.trim ();
 	if (query.length < 2) {
-		suggestionsContainer.innerHTML = '';
-		suggestionsContainer.classList.add ('is-hidden');
+		elements.suggestionsContainer.innerHTML = '';
+		elements.suggestionsContainer.classList.add ('is-hidden');
 		return;
 	}
 
 	debounceTimer = setTimeout (async () => {
 		try {
-			searchInput.parentElement.classList.add ('is-loading');
+			elements.searchInput.parentElement.classList.add ('is-loading');
 			const response = await fetch (`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent (query)}&count=5&language=en&format=json`);
 			const data = await response.json ();
-			searchInput.parentElement.classList.remove ('is-loading');
+			elements.searchInput.parentElement.classList.remove ('is-loading');
 
 			if (data.results && data.results.length > 0) {
+				const {
+					suggestionsContainer
+				} = elements;
 				suggestionsContainer.innerHTML = '';
 				suggestionsContainer.scrollTop = 0;
+				const fragment = document.createDocumentFragment ();
+
 				data.results.forEach (result => {
 					const div = document.createElement ('div');
 					div.className = 'suggestion-item';
@@ -285,9 +150,9 @@ searchInput.addEventListener ('input', () => {
 						<span class="location-main">${result.name}</span>
 						<span class="location-sub">${subText}</span>
 					`;
-					
+
 					div.addEventListener ('click', () => {
-						searchInput.value = `${result.name}, ${result.country}`;
+						elements.searchInput.value = `${result.name}, ${result.country}`;
 						suggestionsContainer.classList.add ('is-hidden');
 						currentCoords = {
 							latitude: result.latitude,
@@ -295,61 +160,238 @@ searchInput.addEventListener ('input', () => {
 							name: result.name,
 							country: result.country
 						};
-						console.log (`Selected: ${result.name}, ${result.country} (${result.latitude}, ${result.longitude})`);
-						searchCheckIcon.classList.add ('is-active');
+						elements.searchCheckIcon.classList.add ('is-active');
 						fetchWeather ();
 					});
-					suggestionsContainer.appendChild (div);
+					fragment.appendChild (div);
 				});
+				suggestionsContainer.appendChild (fragment);
 				suggestionsContainer.classList.remove ('is-hidden');
 			} else {
-				suggestionsContainer.innerHTML = '';
-				suggestionsContainer.classList.add ('is-hidden');
+				elements.suggestionsContainer.innerHTML = '';
+				elements.suggestionsContainer.classList.add ('is-hidden');
 			}
 		} catch (error) {
-			searchInput.parentElement.classList.remove ('is-loading');
+			elements.searchInput.parentElement.classList.remove ('is-loading');
 			console.error ('Error fetching suggestions:', error);
 		}
 	}, 300);
 });
 
-document.addEventListener ('click', (e) => {
-	if (!searchInput.contains (e.target) && !suggestionsContainer.contains (e.target)) {
-		suggestionsContainer.classList.add ('is-hidden');
+elements.retryButton.addEventListener ('click', () => {
+	hideError ();
+	elements.searchInput.value = '';
+	elements.searchInput.focus ();
+});
+
+elements.exampleLocationButtons.forEach (btn => {
+	btn.addEventListener ('click', () => {
+		hideError ();
+		elements.searchInput.value = btn.textContent;
+		searchCity (btn.textContent).then (_r => {
+		});
+	});
+});
+
+elements.searchInput.addEventListener ('keypress', (e) => {
+	if (e.key === 'Enter') {
+		const city = elements.searchInput.value.trim ();
+		if (city) {
+			searchCity (city).then (_r => {
+			});
+			elements.suggestionsContainer.classList.add ('is-hidden');
+		}
 	}
 });
 
-unitsMenu.addEventListener ('click', (e) => {
+
+async function fetchWeather () {
+	if (!currentCoords) return;
+
+	const {
+		latitude,
+		longitude
+	} = currentCoords;
+	const tempUnit = elements.tempToggle.checked ? 'fahrenheit' : 'celsius';
+	const windUnit = elements.windToggle.checked ? 'mph' : 'kmh';
+	const precipitationUnit = elements.precipitationToggle.checked ? 'inch' : 'mm';
+	const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,precipitation,weather_code&hourly=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&temperature_unit=${tempUnit}&wind_speed_unit=${windUnit}&precipitation_unit=${precipitationUnit}`;
+
+	try {
+		const response = await fetch (url);
+		const data = await response.json ();
+		displayWeather (data);
+	} catch (error) {
+		console.error ('Error fetching weather:', error);
+	}
+}
+
+function displayWeather (data) {
+	const {
+		current,
+		current_units,
+		daily, hourly,
+		hourly_units
+	} = data;
+
+	elements.currentFeelsLike.textContent = `${current.apparent_temperature}${current_units.apparent_temperature}`;
+	elements.currentHumidity.textContent = `${current.relative_humidity_2m}${current_units.relative_humidity_2m}`;
+	elements.currentWind.textContent = `${current.wind_speed_10m} ${current_units.wind_speed_10m}`;
+	elements.currentPrecipitation.textContent = `${current.precipitation} ${current_units.precipitation}`;
+
+	const weatherCode = current.weather_code;
+	const temp = current.temperature_2m;
+	const unit = current_units.temperature_2m;
+
+	elements.todayTemp.textContent = `${temp}${unit}`;
+	elements.todayIcon.src = getWeatherIcon (weatherCode);
+	elements.todayIcon.classList.remove ('is-hidden');
+	elements.todayDescription.textContent = weatherIcons[weatherCode] || weatherIcons.default;
+	elements.todayDescription.classList.add ('is-capitalized');
+
+	const maxTemp = daily.temperature_2m_max[0];
+	const minTemp = daily.temperature_2m_min[0];
+	elements.todayRange.textContent = `${maxTemp}${unit} / ${minTemp}${unit}`;
+
+	elements.scrollLeftBtn.classList.remove ('is-hidden');
+	elements.scrollRightBtn.classList.remove ('is-hidden');
+
+	const {
+		hourlyForecastContainer
+	} = elements;
+	hourlyForecastContainer.innerHTML = '';
+	hourlyForecastContainer.classList.remove ('m-0');
+	hourlyForecastContainer.classList.add ('is-variable', 'is-1', 'px-2', 'pb-4');
+
+	const now = new Date ();
+	const startIndex = hourly.time.findIndex (t => new Date (t) >= now);
+	const displayIndex = startIndex !== -1 ? startIndex : 0;
+	const next24Hours = hourly.time.slice (displayIndex, displayIndex + 24);
+
+	const fragment = document.createDocumentFragment ();
+	const hourlyUnit = hourly_units.temperature_2m;
+
+	next24Hours.forEach ((time, i) => {
+		const dateObj = new Date (time);
+		const date = dateObj.toLocaleDateString ('en-US', {
+			month: 'short',
+			day: 'numeric'
+		});
+		const hour = dateObj.toLocaleTimeString ('en-US', {
+			hour: 'numeric'
+		});
+		const temp = hourly.temperature_2m[displayIndex + i];
+		const weatherCode = hourly.weather_code[displayIndex + i];
+
+		const col = document.createElement ('div');
+		col.className = 'column is-narrow p-1';
+		col.innerHTML = `
+			<div class="card forecast-item-card p-2 has-text-centered">
+				<p class="is-size-7">${date}</p>
+				<p class="is-size-7">${hour}</p>
+				<img src="${getWeatherIcon (weatherCode)}" class="weather-icon mb-1" alt="weather">
+				<p class="forecast-temp">${temp}${hourlyUnit}</p>
+			</div>
+		`;
+		fragment.appendChild (col);
+	});
+	hourlyForecastContainer.appendChild (fragment);
+
+	hourlyForecastContainer.scrollLeft = 0;
+	setTimeout (updateScrollButtons, 100);
+}
+
+function updateScrollButtons () {
+	const {
+		hourlyForecastContainer,
+		scrollLeftBtn,
+		scrollRightBtn
+	} = elements;
+	const maxScroll = hourlyForecastContainer.scrollWidth - hourlyForecastContainer.clientWidth;
+	scrollLeftBtn.disabled = hourlyForecastContainer.scrollLeft <= 0;
+	scrollRightBtn.disabled = hourlyForecastContainer.scrollLeft >= maxScroll;
+}
+
+elements.hourlyForecastContainer.addEventListener ('scroll', updateScrollButtons);
+
+elements.scrollLeftBtn.addEventListener ('click', () => {
+	elements.hourlyForecastContainer.scrollBy ({
+		left: -200,
+		behavior: 'smooth'
+	});
+});
+
+elements.scrollRightBtn.addEventListener ('click', () => {
+	elements.hourlyForecastContainer.scrollBy ({
+		left: 200,
+		behavior: 'smooth'
+	});
+});
+
+// Errors
+
+function showError () {
+	elements.searchCheckIcon.classList.remove ('is-active');
+	elements.errorModal.classList.add ('is-active');
+}
+
+function hideError () {
+	elements.errorModal.classList.remove ('is-active');
+}
+
+document.addEventListener ('click', (e) => {
+	if (!elements.searchInput.contains (e.target) && !elements.suggestionsContainer.contains (e.target)) {
+		elements.suggestionsContainer.classList.add ('is-hidden');
+	}
+});
+
+// Units functionalities
+elements.unitsMenu.addEventListener ('click', (e) => {
 	e.stopPropagation ();
-	unitsDropdown.classList.toggle ('is-hidden');
+	elements.unitsDropdown.classList.toggle ('is-hidden');
 });
 
 document.addEventListener ('click', (e) => {
-	if (!unitsDropdown.classList.contains ('is-hidden') && !unitsDropdown.contains (e.target) && e.target !== unitsMenu) {
-		unitsDropdown.classList.add ('is-hidden');
+	if (!elements.unitsDropdown.classList.contains ('is-hidden') && !elements.unitsDropdown.contains (e.target) && e.target !== elements.unitsMenu) {
+		elements.unitsDropdown.classList.add ('is-hidden');
 	}
 });
 
-tempToggle.addEventListener ('change', () => {
-	const isImperial = tempToggle.checked;
-	tempLabel.textContent = `Temperature (${isImperial ? '°F' : '°C'})`;
-	console.log (`Temperature units switched to: ${isImperial ? 'Fahrenheit' : 'Celsius'}`);
+function handleUnitChange (toggle, label, type) {
+	const isImperial = toggle.checked;
+	let unitText = '';
+	let typeText = '';
+
+	if (type === 'temp') {
+		unitText = isImperial ? '°F' : '°C';
+		typeText = 'Temperature';
+	} else if (type === 'wind') {
+		unitText = isImperial ? 'mph' : 'km/h';
+		typeText = 'Wind speed';
+	} else if (type === 'precipitation') {
+		unitText = isImperial ? 'in' : 'mm';
+		typeText = 'Precipitation';
+	}
+
+	label.textContent = `${typeText} (${unitText})`;
 	fetchWeather ().then (_r => {
 	});
+}
+
+// Logo functionalities
+elements.logoContent.addEventListener ('click', () => {
+	elements.weatherboyModal.classList.add ('is-active');
+});
+elements.weatherboyModal.querySelector ('.modal-background').addEventListener ('click', () => {
+	elements.weatherboyModal.classList.remove ('is-active');
+});
+elements.weatherboyModal.querySelector ('.modal-close').addEventListener ('click', () => {
+	elements.weatherboyModal.classList.remove ('is-active');
 });
 
-windToggle.addEventListener ('change', () => {
-	const isImperial = windToggle.checked;
-	windLabel.textContent = `Wind Speed (${isImperial ? 'mph' : 'km/h'})`;
-	console.log (`Wind speed units switched to: ${isImperial ? 'mph' : 'km/h'}`);
-	fetchWeather ().then (_r => {
-	});
-});
-
-precipitationToggle.addEventListener ('change', () => {
-	const isImperial = precipitationToggle.checked;
-	precipitationLabel.textContent = `Precipitation (${isImperial ? 'in' : 'mm'})`;
-	console.log (`Precipitation units switched to: ${isImperial ? 'inches' : 'millimeters'}`);
-	fetchWeather ().then (_r => {
-	});
-});
+elements.tempToggle.addEventListener ('change',
+	() => handleUnitChange (elements.tempToggle, elements.tempLabel, 'temp'));
+elements.windToggle.addEventListener ('change',
+	() => handleUnitChange (elements.windToggle, elements.windLabel, 'wind'));
+elements.precipitationToggle.addEventListener ('change',
+	() => handleUnitChange (elements.precipitationToggle, elements.precipitationLabel, 'precipitation'));

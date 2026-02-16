@@ -4,10 +4,9 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+	<title>Weather Boy</title>
+
 	<link rel="icon" type="image/png" sizes="32x32" href="assets/images/weather/icon-drizzle.webp">
-
-	<title>Frontend Mentor | Weather app</title>
-
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
 	<link rel="stylesheet" href="style.css">
 </head>
@@ -29,7 +28,7 @@
 
 	<div class="dropdown card is-hidden p-4 m-0">
 		<p>Imperial Measurements</p>
-		<div style="border-bottom: 1px solid var(--school-bus-yellow);" class="mt-1 mb-1"></div>
+		<div class="dropdown-divider mt-1 mb-1"></div>
 		<div class="field mb-4 is-flex is-flex-direction-column">
 			<label for="temp-toggle" id="temp-label" class="label is-small">Temperature (°C)</label>
 			<label class="switch">
@@ -81,7 +80,6 @@
 							<h2 class="title is-4 mb-2">Today's forecast</h2>
 							<div id="today-forecast-content"
 							     class="is-flex is-flex-direction-column is-align-items-center-mobile">
-								<!-- Insert today's big forecast here -->
 								<img id="today-icon" src="assets/images/weather/icon-sunny.webp" alt="weather icon"
 								     class="weather-icon-large mb-2 is-hidden">
 								<p class="subtitle is-2 mb-0" id="today-temp">--°</p>
@@ -103,7 +101,6 @@
 								<span class="icon">&lt;</span>
 							</button>
 							<div id="hourly-forecast" class="columns is-mobile is-centered">
-								<!-- Insert hourly forecast for the selected day here -->
 							</div>
 							<button id="hourly-scroll-right" class="button is-rounded is-small scroll-button">
 								<span class="icon">&gt;</span>
@@ -134,7 +131,7 @@
 						</div>
 						<div class="column is-full-tablet is-half-mobile">
 							<div class="card detail-card">
-								<p class="heading mb-1">Precipitation</p>
+								<p class="heading mb-1">Snow</p>
 								<p id="current-precipitation" class="subtitle is-5 has-text-weight-normal">--</p>
 							</div>
 						</div>
@@ -154,7 +151,7 @@
 	<div class="modal-content">
 		<div class="card p-5 has-text-centered">
 			<div class="mb-4">
-				<img src="assets/images/icons/icon-error.svg" alt="Error" style="width: 64px;">
+				<img src="assets/images/icons/icon-error.svg" alt="Error" class="error-icon">
 			</div>
 			<h3 class="title is-4">Area not found</h3>
 			<p class="mb-4">The area you're looking for cannot be found. Try one of these locations instead:</p>
@@ -177,7 +174,7 @@
 	<div class="modal-background"></div>
 	<div class="modal-content">
 		<div class="card p-5 has-text-centered">
-			<img src="assets/images/weatherboy.png" alt="Weather Boy" style="max-width: 100%;">
+			<img src="assets/images/weatherboy.png" alt="Weather Boy" class="weatherboy-image">
 		</div>
 	</div>
 	<button class="modal-close is-large" aria-label="close"></button>
