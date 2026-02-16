@@ -221,9 +221,6 @@ input:checked + .slider:before {
     max-height: 500px;
 }
 
-.h-100 {
-    height: 100%;
-}
 
 .detail-card {
     background-color: var(--oxford-navy) !important;
@@ -259,20 +256,12 @@ input:checked + .slider:before {
     height: 48px;
 }
 
-/* Modal styles to ensure Bulma's modal is properly shown */
-.modal.is-active {
-    display: flex;
-}
-
 .search-feedback-icon {
     width: 20px;
     height: 20px;
     display: none;
 }
 
-.search-feedback-icon.is-active {
-    display: inline-block;
-}
 
 #search-input {
     background-color: var(--prussian-blue);
@@ -312,20 +301,47 @@ input:checked + .slider:before {
     background-color: var(--oxford-navy);
     border: 1px solid var(--school-bus-yellow);
     border-top: none;
-    border-radius: 0 0 4px 4px;
-    max-height: 200px;
+    border-radius: 0 0 8px 8px;
+    max-height: 300px;
     overflow-y: auto;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 195, 0, 0.2);
 }
 
 .suggestion-item {
-    padding: 8px 12px;
+    padding: 12px 16px;
     cursor: pointer;
+    border-bottom: 1px solid rgba(0, 29, 61, 0.5);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
     color: var(--almost-pure-white);
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
 }
 
 .suggestion-item:hover {
     background-color: var(--prussian-blue);
+    padding-left: 20px;
     color: var(--school-bus-yellow);
+}
+
+.suggestion-item .location-icon {
+    margin-right: 12px;
+    opacity: 0.7;
+    width: 16px;
+    height: 16px;
+}
+
+.suggestion-item .location-main {
+    font-weight: 600;
+}
+
+.suggestion-item .location-sub {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    margin-left: 8px;
 }
 
 .attribution {

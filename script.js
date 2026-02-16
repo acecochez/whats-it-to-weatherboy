@@ -3,11 +3,11 @@ const unitsDropdown = document.querySelector ('.dropdown');
 
 const tempToggle = document.getElementById ('temp-toggle');
 const windToggle = document.getElementById ('wind-toggle');
-const precipToggle = document.getElementById ('precip-toggle');
+const precipitationToggle = document.getElementById ('precipitation-toggle');
 
 const tempLabel = document.getElementById ('temp-label');
 const windLabel = document.getElementById ('wind-label');
-const precipLabel = document.getElementById ('precip-label');
+const precipitationLabel = document.getElementById ('precipitation-label');
 
 const searchInput = document.getElementById ('search-input');
 const searchButton = document.getElementById ('search-button');
@@ -21,8 +21,7 @@ const todayTemp = document.getElementById ('today-temp');
 const todayIcon = document.getElementById ('today-icon');
 const todayDescription = document.getElementById ('today-description');
 const todayRange = document.getElementById ('today-range');
-const todayForecastContent = document.getElementById ('today-forecast-content');
-
+document.getElementById ('today-forecast-content');
 const searchCheckIcon = document.getElementById ('search-check-icon');
 const errorModal = document.getElementById ('error-modal');
 const weatherboyModal = document.getElementById ('weatherboy-modal');
@@ -65,24 +64,23 @@ function getWeatherIcon (code) {
 let currentCoords = null;
 
 function showEmptyState () {
-	const hourlyEmptyHTML = `
+	hourlyForecastContainer.innerHTML = `
 		<div class="column is-full has-text-centered">
 			<p class="subtitle is-5 has-text-white has-text-weight-normal">Nothing yet!</p>
 		</div>
 	`;
-	hourlyForecastContainer.innerHTML = hourlyEmptyHTML;
 	hourlyForecastContainer.classList.add ('m-0');
 	hourlyForecastContainer.classList.remove ('is-variable', 'is-1');
 	hourlyForecastContainer.style.paddingBottom = '';
 	currentFeelsLike.textContent = 'Nothing yet!';
 	currentHumidity.textContent = 'Dry!';
 	currentWind.textContent = 'Icy cold!';
-	currentPrecipitation.textContent = '100% don\'t care!';
+	currentPrecipitation.textContent = 'Don\'t care!';
 	scrollLeftBtn.classList.add ('is-hidden');
 	scrollRightBtn.classList.add ('is-hidden');
 }
 
-// Initialize empty state
+// Initialise empty state
 showEmptyState ();
 
 async function searchCity (city) {
@@ -94,7 +92,7 @@ async function searchCity (city) {
 			currentCoords = {latitude, longitude, name, country};
 			console.log (`Found: ${name}, ${country} (${latitude}, ${longitude})`);
 			searchCheckIcon.classList.add ('is-active');
-			fetchWeather ();
+			await fetchWeather ();
 		} else {
 			showError ();
 		}
@@ -123,7 +121,8 @@ exampleLocationButtons.forEach (btn => {
 	btn.addEventListener ('click', () => {
 		hideError ();
 		searchInput.value = btn.textContent;
-		searchCity (btn.textContent);
+		searchCity (btn.textContent).then (_r => {
+		});
 	});
 });
 
@@ -146,9 +145,9 @@ async function fetchWeather () {
 	const {latitude, longitude} = currentCoords;
 	const tempUnit = tempToggle.checked ? 'fahrenheit' : 'celsius';
 	const windUnit = windToggle.checked ? 'mph' : 'kmh';
-	const precipUnit = precipToggle.checked ? 'inch' : 'mm';
+	const precipitationUnit = precipitationToggle.checked ? 'inch' : 'mm';
 
-	const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,precipitation,weather_code&hourly=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&temperature_unit=${tempUnit}&wind_speed_unit=${windUnit}&precipitation_unit=${precipUnit}`;
+	const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,precipitation,weather_code&hourly=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&temperature_unit=${tempUnit}&wind_speed_unit=${windUnit}&precipitation_unit=${precipitationUnit}`;
 
 	try {
 		const response = await fetch (url);
@@ -239,7 +238,8 @@ scrollRightBtn.addEventListener ('click', () => {
 searchButton.addEventListener ('click', () => {
 	const city = searchInput.value.trim ();
 	if (city) {
-		searchCity (city);
+		searchCity (city).then (_r => {
+		});
 	}
 });
 
@@ -247,7 +247,8 @@ searchInput.addEventListener ('keypress', (e) => {
 	if (e.key === 'Enter') {
 		const city = searchInput.value.trim ();
 		if (city) {
-			searchCity (city);
+			searchCity (city).then (_r => {
+			});
 			suggestionsContainer.classList.add ('is-hidden');
 		}
 	}
@@ -273,8 +274,18 @@ searchInput.addEventListener ('input', () => {
 				data.results.forEach (result => {
 					const div = document.createElement ('div');
 					div.className = 'suggestion-item';
-					const locationName = `${result.name}${result.admin1 ? ', ' + result.admin1 : ''}, ${result.country}`;
-					div.textContent = locationName;
+
+					const subParts = [];
+					if (result.admin1) subParts.push (result.admin1);
+					subParts.push (result.country);
+					const subText = subParts.join (', ');
+
+					div.innerHTML = `
+						<img src="assets/images/icons/icon-search.svg" class="location-icon" alt="location">
+						<span class="location-main">${result.name}</span>
+						<span class="location-sub">${subText}</span>
+					`;
+					
 					div.addEventListener ('click', () => {
 						searchInput.value = result.name;
 						suggestionsContainer.classList.add ('is-hidden');
@@ -322,19 +333,22 @@ tempToggle.addEventListener ('change', () => {
 	const isImperial = tempToggle.checked;
 	tempLabel.textContent = `Temperature (${isImperial ? '°F' : '°C'})`;
 	console.log (`Temperature units switched to: ${isImperial ? 'Fahrenheit' : 'Celsius'}`);
-	fetchWeather ();
+	fetchWeather ().then (_r => {
+	});
 });
 
 windToggle.addEventListener ('change', () => {
 	const isImperial = windToggle.checked;
 	windLabel.textContent = `Wind Speed (${isImperial ? 'mph' : 'km/h'})`;
 	console.log (`Wind speed units switched to: ${isImperial ? 'mph' : 'km/h'}`);
-	fetchWeather ();
+	fetchWeather ().then (_r => {
+	});
 });
 
-precipToggle.addEventListener ('change', () => {
-	const isImperial = precipToggle.checked;
-	precipLabel.textContent = `Precipitation (${isImperial ? 'in' : 'mm'})`;
+precipitationToggle.addEventListener ('change', () => {
+	const isImperial = precipitationToggle.checked;
+	precipitationLabel.textContent = `Precipitation (${isImperial ? 'in' : 'mm'})`;
 	console.log (`Precipitation units switched to: ${isImperial ? 'inches' : 'millimeters'}`);
-	fetchWeather ();
+	fetchWeather ().then (_r => {
+	});
 });
