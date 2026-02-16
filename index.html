@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="icon" type="image/png" sizes="32x32" href="assets/images/weather/icon-drizzle.webp">
+
+	<title>Frontend Mentor | Weather app</title>
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="is-flex is-justify-content-space-between is-align-items-center p-5">
+	<div class="logo-container">
+		<div class="logo-content is-unselectable">
+			<img src="assets/images/weather/icon-drizzle.webp" alt="Weather app logo" class="mr-2">
+			<span>Weather Boy</span>
+		</div>
+	</div>
+	<div class="units-wrapper">
+		<a class="button units-toggle is-unselectable">
+			<img src="assets/images/icons/icon-units.svg" alt="units" class="pr-2">
+			Units
+		</a>
+	</div>
+
+	<div class="dropdown card is-hidden p-4 m-0">
+		<p>Imperial Measurements</p>
+		<div style="border-bottom: 1px solid var(--school-bus-yellow);" class="mt-1 mb-1"></div>
+		<div class="field mb-4 is-flex is-flex-direction-column">
+			<label for="temp-toggle" id="temp-label" class="label is-small">Temperature (°C)</label>
+			<label class="switch">
+				<input class="toggle" type="checkbox" id="temp-toggle">
+				<span class="slider"></span>
+			</label>
+		</div>
+
+		<div class="field mb-4 is-flex is-flex-direction-column">
+			<label for="wind-toggle" id="wind-label" class="label is-small">Wind Speed (km/h)</label>
+			<label class="switch">
+				<input class="toggle" type="checkbox" id="wind-toggle">
+				<span class="slider"></span>
+			</label>
+		</div>
+
+		<div class="field mb-0 is-flex is-flex-direction-column">
+			<label for="precip-toggle" id="precip-label" class="label is-small">Precipitation (mm)</label>
+			<label class="switch">
+				<input class="toggle" type="checkbox" id="precip-toggle">
+				<span class="slider"></span>
+			</label>
+		</div>
+	</div>
+</nav>
+
+<section class="section">
+	<div class="container">
+		<div class="field">
+			<label class="label" for="search-input">How's the sky looking today?</label>
+			<div class="control has-icons-left has-icons-right">
+				<input id="search-input" class="input" type="text" placeholder="Search for a city, e.g., New York"
+				       autocomplete="off">
+				<span class="icon is-left">
+            <img src="assets/images/icons/icon-search.svg" alt="search">
+          </span>
+				<span class="icon is-right">
+            <img id="search-check-icon" class="search-feedback-icon" src="assets/images/icons/icon-checkmark.svg"
+                 alt="success">
+          </span>
+				<div id="suggestions" class="search-suggestions is-hidden"></div>
+			</div>
+			<button id="search-button" class="button is-link mt-2">Search</button>
+		</div>
+		<div class="mt-6">
+			<div class="columns">
+				<div class="column is-three-quarters">
+					<div class="card bg-today p-4 main-forecast-card mb-5">
+						<div class="has-text-centered-mobile">
+							<h2 class="title is-4 mb-2">Today's forecast</h2>
+							<div id="today-forecast-content"
+							     class="is-flex is-flex-direction-column is-align-items-center-mobile">
+								<!-- Insert today's big forecast here -->
+								<p class="subtitle is-2 mb-0" id="today-temp">--°</p>
+								<img id="today-icon" src="assets/images/weatherboy.png" alt="weather"
+								     style="width: 96px; height: 96px;">
+								<div class="is-flex is-align-items-center">
+									<p class="is-size-5 mr-3" id="today-description">What's it to you?!</p>
+									<p class="is-size-6" id="today-range">-- / --</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="card weather-card bg-today p-2">
+						<div class="hourly-forecast-wrapper" style="width: 100%;">
+							<button id="hourly-scroll-left" class="button is-rounded is-small scroll-button">
+								<span class="icon">&lt;</span>
+							</button>
+							<div id="hourly-forecast" class="columns is-mobile is-centered" style="width: 100%;">
+								<!-- Insert hourly forecast for the selected day here -->
+							</div>
+							<button id="hourly-scroll-right" class="button is-rounded is-small scroll-button">
+								<span class="icon">&gt;</span>
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="column is-one-quarter">
+					<div class="columns is-multiline is-variable is-1">
+						<div class="column is-full">
+							<div class="card detail-card">
+								<p class="heading mb-1">Feels like</p>
+								<p id="current-feels-like" class="subtitle is-5 has-text-weight-normal">--</p>
+							</div>
+						</div>
+						<div class="column is-full">
+							<div class="card detail-card">
+								<p class="heading mb-1">Humidity</p>
+								<p id="current-humidity" class="subtitle is-5 has-text-weight-normal">--</p>
+							</div>
+						</div>
+						<div class="column is-full">
+							<div class="card detail-card">
+								<p class="heading mb-1">Wind</p>
+								<p id="current-wind" class="subtitle is-5 has-text-weight-normal">--</p>
+							</div>
+						</div>
+						<div class="column is-full">
+							<div class="card detail-card">
+								<p class="heading mb-1">Precipitation</p>
+								<p id="current-precipitation" class="subtitle is-5 has-text-weight-normal">--</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<div class="attribution">
+	Challenge by <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>.
+	Coded by Ace Cochez.
+</div>
+<div id="error-modal" class="modal">
+	<div class="modal-background"></div>
+	<div class="modal-content">
+		<div class="card p-5 has-text-centered">
+			<div class="mb-4">
+				<img src="assets/images/icons/icon-error.svg" alt="Error" style="width: 64px;">
+			</div>
+			<h3 class="title is-4">Area not found</h3>
+			<p class="mb-4">The area you're looking for cannot be found. Try one of these locations instead:</p>
+			<div class="buttons is-centered mb-4">
+				<button class="button is-light example-location">London</button>
+				<button class="button is-light example-location">Tokyo</button>
+				<button class="button is-light example-location">Paris</button>
+			</div>
+			<button id="retry-button" class="button is-danger">
+          <span class="icon">
+            <img src="assets/images/icons/icon-retry.svg" alt="retry">
+          </span>
+				<span>Retry</span>
+			</button>
+		</div>
+	</div>
+</div>
+
+<div id="weatherboy-modal" class="modal">
+	<div class="modal-background"></div>
+	<div class="modal-content">
+		<div class="card p-5 has-text-centered">
+			<img src="assets/images/weatherboy.png" alt="Weather Boy" style="max-width: 100%;">
+		</div>
+	</div>
+	<button class="modal-close is-large" aria-label="close"></button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

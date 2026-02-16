@@ -1,0 +1,371 @@
+:root {
+    --ink-black: #000814;
+    --prussian-blue: #001d3d;
+    --oxford-navy: #003566;
+    --school-bus-yellow: #ffc300;
+    --gold: #ffd60a;
+    --almost-pure-white: #fdfffc;
+}
+
+body {
+    background-color: var(--ink-black);
+    color: var(--almost-pure-white);
+    min-height: 100vh;
+}
+
+.title, .subtitle, .label, .heading {
+    color: var(--almost-pure-white) !important;
+}
+
+/* Custom switch styling */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--prussian-blue);
+    transition: .4s;
+    border-radius: 20px;
+    border: 1px solid var(--oxford-navy);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.dropdown {
+    position: absolute;
+    right: 1.25rem; /* Matches p-5 (1.25rem) */
+    top: 4.5rem; /* Adjust based on button height + padding */
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-content {
+    display: flex;
+    align-items: center;
+    background-color: var(--prussian-blue);
+    padding: 0.5rem 1rem;
+    border-radius: 290486px;
+    border: 1px solid var(--school-bus-yellow);
+    color: var(--almost-pure-white);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logo-content:hover {
+    background-color: var(--oxford-navy);
+}
+
+.logo-content img {
+    width: 24px;
+    height: 24px;
+}
+
+.units-toggle {
+    background-color: var(--oxford-navy) !important;
+    border: 1px solid var(--school-bus-yellow) !important;
+    color: var(--almost-pure-white) !important;
+    border-radius: 290486px !important;
+    transition: all 0.3s ease;
+}
+
+.units-toggle:hover {
+    background-color: var(--prussian-blue) !important;
+    box-shadow: 0 0 8px var(--gold);
+}
+
+input:checked + .slider {
+    background-color: var(--school-bus-yellow);
+    border-color: var(--gold);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--gold);
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+
+#hourly-forecast {
+    display: flex !important;
+    overflow-x: auto;
+    flex-wrap: nowrap !important;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+#hourly-forecast::-webkit-scrollbar {
+    display: none;
+}
+
+.hourly-forecast-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.scroll-button {
+    background-color: var(--oxford-navy);
+    color: var(--school-bus-yellow);
+    border: 1px solid var(--school-bus-yellow);
+    z-index: 10;
+    cursor: pointer;
+    transition: all 0.3s;
+    height: 40px !important;
+    width: 40px !important;
+}
+
+.scroll-button:hover:not(:disabled) {
+    background-color: var(--prussian-blue);
+    box-shadow: 0 0 10px var(--gold);
+}
+
+.scroll-button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    background-color: var(--oxford-navy);
+}
+
+#hourly-scroll-left {
+    margin-right: 10px;
+}
+
+#hourly-scroll-right {
+    margin-left: 10px;
+}
+
+.weather-card {
+    background-size: cover;
+    background-position: center;
+    color: var(--almost-pure-white);
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--oxford-navy) !important;
+    background-color: var(--prussian-blue);
+}
+
+.card:not(.weather-card):not(.forecast-item-card) {
+    background-color: var(--oxford-navy);
+    color: var(--almost-pure-white);
+    border: 1px solid var(--prussian-blue);
+}
+
+.forecast-item-card {
+    background-color: var(--oxford-navy);
+    color: var(--almost-pure-white);
+    border: 1px solid var(--school-bus-yellow);
+    border-radius: 8px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    min-width: 90px !important;
+}
+
+.forecast-item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 10px var(--gold);
+}
+
+.forecast-item-card p {
+    color: var(--almost-pure-white) !important;
+}
+
+.bg-today {
+    background-image: url('assets/images/backgrounds/bg-today-large.svg');
+}
+
+.main-forecast-card {
+    background-size: cover;
+    background-position: center;
+    border: 1px solid var(--oxford-navy) !important;
+    border-radius: 12px;
+    min-height: 300px;
+    max-height: 500px;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+.detail-card {
+    background-color: var(--oxford-navy) !important;
+    border: 1px solid var(--school-bus-yellow) !important;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    width: 47%;
+}
+
+.detail-card .heading {
+    font-size: 1rem !important;
+}
+
+.detail-card .subtitle {
+    font-size: 1.5rem !important;
+}
+
+@media screen and (max-width: 768px) {
+    .detail-card {
+        aspect-ratio: auto;
+    }
+
+    .bg-today {
+        background-image: url('assets/images/backgrounds/bg-today-small.svg');
+    }
+}
+
+.weather-icon {
+    width: 48px;
+    height: 48px;
+}
+
+/* Modal styles to ensure Bulma's modal is properly shown */
+.modal.is-active {
+    display: flex;
+}
+
+.search-feedback-icon {
+    width: 20px;
+    height: 20px;
+    display: none;
+}
+
+.search-feedback-icon.is-active {
+    display: inline-block;
+}
+
+#search-input {
+    background-color: var(--prussian-blue);
+    color: var(--almost-pure-white);
+    border: 1px solid var(--oxford-navy);
+}
+
+#search-input::placeholder {
+    color: rgba(253, 255, 252, 0.6);
+}
+
+#search-input:focus {
+    background-color: var(--oxford-navy);
+    border-color: var(--gold);
+    box-shadow: 0 0 8px var(--gold);
+    color: var(--almost-pure-white);
+}
+
+#search-button {
+    background-color: var(--oxford-navy) !important;
+    color: var(--almost-pure-white) !important;
+    border: 1px solid var(--school-bus-yellow);
+    font-weight: bold;
+}
+
+#search-button:hover {
+    background-color: var(--prussian-blue) !important;
+    box-shadow: 0 0 10px var(--gold);
+}
+
+.search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: var(--oxford-navy);
+    border: 1px solid var(--school-bus-yellow);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    color: var(--almost-pure-white);
+}
+
+.suggestion-item:hover {
+    background-color: var(--prussian-blue);
+    color: var(--school-bus-yellow);
+}
+
+.attribution {
+    text-align: center;
+    font-size: 0.8rem;
+    padding: 2rem;
+    color: var(--almost-pure-white);
+}
+
+.attribution a {
+    color: var(--school-bus-yellow);
+}
+
+.attribution a:hover {
+    color: var(--gold);
+}
+
+.modal-content .card {
+    background-color: var(--oxford-navy) !important;
+    border: 1px solid var(--school-bus-yellow);
+}
+
+.example-location {
+    background-color: var(--prussian-blue) !important;
+    color: var(--almost-pure-white) !important;
+    border: 1px solid var(--oxford-navy) !important;
+}
+
+.example-location:hover {
+    background-color: var(--oxford-navy) !important;
+    border-color: var(--school-bus-yellow) !important;
+}
+
+#retry-button {
+    background-color: var(--oxford-navy) !important;
+    color: var(--almost-pure-white) !important;
+    border: 1px solid var(--school-bus-yellow) !important;
+}
+
+#retry-button:hover {
+    background-color: var(--prussian-blue) !important;
+    box-shadow: 0 0 10px var(--gold);
+}

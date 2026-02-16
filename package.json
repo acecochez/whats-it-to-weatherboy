@@ -1,0 +1,16 @@
+{
+  "name": "whats-it-to-weatherboy",
+  "version": "1.0.0",
+  "description": "<img width=\"1200\" height=\"675\" alt=\"image\" src=\"https://github.com/user-attachments/assets/e5b4e00d-785c-4678-9945-eb159511a77f\" />",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^7.3.1"
+  }
+}
